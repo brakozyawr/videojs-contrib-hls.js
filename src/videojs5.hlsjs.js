@@ -226,7 +226,14 @@ function Html5HlsJS(source, tech) {
    */
   this.duration = function() {
     // if video is live and sequence number changes return Infinity for hiding timeline
-    return (is_live && moving_window) ? Infinity : el.duration || 0;
+    // when playing DVR on iPhone, the duration of the video element is Infinity, while others have a specific number
+    if (!this.player.options_.is_live) {
+      return el.duration || 0;
+    } else if (is_live && moving_window) {
+      return Infinity;
+    } else {
+      return this.player.hls_.liveSyncPosition;
+    }
   };
 
   // Intercept native TextTrack calls and route to video.js directly only
