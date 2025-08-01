@@ -231,8 +231,12 @@ function Html5HlsJS(source, tech) {
       return el.duration || 0;
     } else if (is_live && moving_window) {
       return Infinity;
-    } else {
+    } else if (el.duration === Infinity) {
+      // for iPhone, where el.duration equals Infinity, return liveSyncPosition
       return this.player.hls_.liveSyncPosition;
+    } else {
+      // For other devices, use el.duration instead of liveSyncPosition
+      return el.duration || 0;
     }
   };
 
