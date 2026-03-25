@@ -116,7 +116,7 @@ function Html5HlsJS(source, tech) {
       hls.attachMedia(el);
       hls.loadSource(source.src);
       var playPromise = player.play();
-      if (playPromise !== undefined) {
+      if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(function(error) {
           console.error('play error:', error)
         });
@@ -158,7 +158,7 @@ function Html5HlsJS(source, tech) {
         console.log('Too many errors, full hls reinit');
         last_error_time = now;
         return fullHlsReinit();
-      } 
+      }
       if (data.fatal) {
         errors_count += 1;
         last_error_time = now;
